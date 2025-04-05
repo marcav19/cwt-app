@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.child_wellness_tracker.model.Meal;
 import com.child_wellness_tracker.repository.MealRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,27 +16,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+@CrossOrigin(origins = "http://localhost:4200/")
 @RestController
 public class MealController {
 
     @Autowired
     MealRepository mealDbRepo;
     
-    @GetMapping("/get-all-meals")
+    @GetMapping("/api/meals")
     public List<Meal> getAllMeals() {
         
             return mealDbRepo.findAll();
 
     }
 
-    @GetMapping("/get-meal/{mealId}")
+    @GetMapping("/api/meals/{mealId}")
     public Meal getMealById(@PathVariable("mealId") Integer id) {
 
         return mealDbRepo.findById(id).get();
 
     }
 
-    @PostMapping("/meal/create")
+    @PostMapping("/api/meals")
     public Meal createMeal(@RequestBody Map<String, String> body) {
 
         String dateTimeStr = body.get("date_time");
@@ -50,7 +52,7 @@ public class MealController {
 
     }
     
-    @PutMapping("/meal/update/{mealId}")
+    @PutMapping("/api/meals/{mealId}")
     public Meal updateMeal(@PathVariable("mealId") Integer id, @RequestBody Map<String, String> body) {
 
         Meal current = mealDbRepo.findById(id).get();
@@ -61,7 +63,7 @@ public class MealController {
         
     }
 
-    @DeleteMapping("/meal/delete/{mealId}")
+    @DeleteMapping("/api/meals/{mealId}")
     public String deleteMeal(@PathVariable("mealId") Integer id) {
         
         if (!mealDbRepo.findById(id).equals(Optional.empty())) {
